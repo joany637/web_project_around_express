@@ -1,6 +1,6 @@
 const express = require('express');
-const users = require('./users.json');
-const cards = require('./cards.json');
+const users = require('./data/users.json');
+const cards = require('./data/cards.json');
 const app = express();
 const PORT = 3000;
 
