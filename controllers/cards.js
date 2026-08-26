@@ -1,4 +1,9 @@
 const Card = require('../models/card');
+const {
+  BAD_REQUEST,
+  NOT_FOUND,
+  INTERNAL_SERVER_ERROR,
+} = require('../utils/constants');
 
 // GET /cards
 module.exports.getCards = (req, res) => {
@@ -6,10 +11,8 @@ module.exports.getCards = (req, res) => {
     .then((cards) => {
       res.send(cards);
     })
-    .catch((err) => {
-      console.log(err);
-
-      res.status(500).send({
+    .catch(() => {
+      res.status(INTERNAL_SERVER_ERROR).send({
         message: 'Error del servidor',
       });
     });
@@ -28,21 +31,19 @@ module.exports.createCard = (req, res) => {
       res.status(201).send(card);
     })
     .catch((err) => {
-      console.log(err);
-
       if (err.name === 'ValidationError') {
-        return res.status(400).send({
+        return res.status(BAD_REQUEST).send({
           message: 'Datos de tarjeta no válidos',
         });
       }
 
       if (err.name === 'CastError') {
-        return res.status(400).send({
+        return res.status(BAD_REQUEST).send({
           message: 'Datos de tarjeta no válidos',
         });
       }
 
-      res.status(500).send({
+      return res.status(INTERNAL_SERVER_ERROR).send({
         message: 'Error del servidor',
       });
     });
@@ -56,25 +57,24 @@ module.exports.deleteCard = (req, res) => {
       res.send(card);
     })
     .catch((err) => {
-      console.log(err);
-
       if (err.name === 'DocumentNotFoundError') {
-        return res.status(404).send({
+        return res.status(NOT_FOUND).send({
           message: 'Tarjeta no encontrada',
         });
       }
 
       if (err.name === 'CastError') {
-        return res.status(400).send({
+        return res.status(BAD_REQUEST).send({
           message: 'ID de tarjeta no válido',
         });
       }
 
-      res.status(500).send({
+      return res.status(INTERNAL_SERVER_ERROR).send({
         message: 'Error del servidor',
       });
     });
 };
+
 // PUT /cards/:cardId/likes
 module.exports.likeCard = (req, res) => {
   Card.findByIdAndUpdate(
@@ -93,21 +93,19 @@ module.exports.likeCard = (req, res) => {
       res.send(card);
     })
     .catch((err) => {
-      console.log(err);
-
       if (err.name === 'DocumentNotFoundError') {
-        return res.status(404).send({
+        return res.status(NOT_FOUND).send({
           message: 'Tarjeta no encontrada',
         });
       }
 
       if (err.name === 'CastError') {
-        return res.status(400).send({
+        return res.status(BAD_REQUEST).send({
           message: 'ID de tarjeta no válido',
         });
       }
 
-      res.status(500).send({
+      return res.status(INTERNAL_SERVER_ERROR).send({
         message: 'Error del servidor',
       });
     });
@@ -131,21 +129,19 @@ module.exports.dislikeCard = (req, res) => {
       res.send(card);
     })
     .catch((err) => {
-      console.log(err);
-
       if (err.name === 'DocumentNotFoundError') {
-        return res.status(404).send({
+        return res.status(NOT_FOUND).send({
           message: 'Tarjeta no encontrada',
         });
       }
 
       if (err.name === 'CastError') {
-        return res.status(400).send({
+        return res.status(BAD_REQUEST).send({
           message: 'ID de tarjeta no válido',
         });
       }
 
-      res.status(500).send({
+      return res.status(INTERNAL_SERVER_ERROR).send({
         message: 'Error del servidor',
       });
     });
